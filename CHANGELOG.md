@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased, 2026-10-07
+
+- Protected main with required pull requests, passing CI, resolved conversations, and blocks on
+  force pushes and deletion, including administrators.
+- Updated CI and release actions to current pinned revisions and added Node 24 coverage.
+- Migrated the release workflow from the missing npm token to OIDC trusted publishing on Node 24
+  with npm 11.18.0. The npm owner must configure the matching publisher before the next release.
+- Added `docs/RELEASING.md` and corrected stale release-maintenance instructions.
+
 ## 2026-09-10 (v0.1.5)
 
 Docs only, no code changes. Updated GitHub username references to lowercase (max-bissolati) after the

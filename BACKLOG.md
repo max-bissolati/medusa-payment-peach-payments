@@ -2,10 +2,15 @@
 
 ## What's next
 
-**Maintain and announce.** v0.1.0 is live on npm (published 2026-07-07 via the release
-workflow with provenance) and the repo is public. Candidate next steps: submit the plugin
-to Medusa's integrations listing, announce in the Medusa Discord and community channels,
-and watch the issue tracker. The hardening list below is the code backlog.
+**Complete publishing setup and maintain.** npm already serves v0.1.5. The old GitHub Actions
+publish attempt failed because no `NPM_TOKEN` was configured. The replacement workflow uses npm
+trusted publishing; configure the owner-side trust entry described in `docs/RELEASING.md` before
+pushing the next version tag, then verify its first real publish. A green test run does not prove
+that npm trust is configured.
+
+Review the open Dependabot pull requests separately, especially major TypeScript, Jest and Medusa
+updates. Do not batch-merge them as repository housekeeping. Community announcements and a Medusa
+listing remain optional follow-ups requiring explicit authorization.
 
 ## Hardening (LOW, non-blocking, from the verification loop)
 
