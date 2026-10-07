@@ -8,6 +8,8 @@
 - Migrated the release workflow from the missing npm token to OIDC trusted publishing on Node 24
   with npm 11.18.0. The npm owner must configure the matching publisher before the next release.
 - Added `docs/RELEASING.md` and corrected stale release-maintenance instructions.
+- Recorded the existing dependency audit findings for a separate compatibility-reviewed update;
+  this maintenance change does not claim to remediate those dependency advisories.
 
 ## 2026-09-10 (v0.1.5)
 

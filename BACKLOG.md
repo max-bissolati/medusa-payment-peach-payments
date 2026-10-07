@@ -12,6 +12,22 @@ Review the open Dependabot pull requests separately, especially major TypeScript
 updates. Do not batch-merge them as repository housekeeping. Community announcements and a Medusa
 listing remain optional follow-ups requiring explicit authorization.
 
+## Dependency security review
+
+The 2026-10-07 `npm audit` of the current lockfile reports 175 affected package entries
+(46 moderate, 127 high, 2 critical). This repository installs Medusa as development dependencies
+and declares it as a peer dependency for consumers; audit counts alone do not prove runtime
+exposure in a consuming store. Review that store's actual lockfile separately.
+
+- Critical `@mikro-orm/core`: advisory GHSA-gwhv-j974-6fxm (SQL injection), with related
+  GHSA-qpfv-44f3-qqx6 (prototype pollution). npm proposes updating the Medusa development packages
+  to 2.21.2. Assess the existing Medusa dependency PR, compatible framework versions, and plugin
+  lifecycle tests before updating `package.json` and `package-lock.json`.
+- Critical `proxy-addr`: GHSA-jqcg-44mw-7w3h (IP spoofing); affected range >=1.1.0 <2.0.8.
+  Review the transitive update and trusted-proxy configuration where this is used.
+- Re-run the full audit after remediation. Do not apply `npm audit fix --force` blindly or treat
+  passing plugin unit tests as evidence that these dependency advisories are resolved.
+
 ## Hardening (LOW, non-blocking, from the verification loop)
 
 All of these were confirmed non-exploitable by the reviewers who raised them; they are
