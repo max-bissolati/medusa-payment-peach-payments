@@ -1,7 +1,8 @@
 name: release
 
 # Publishes to npm when a version tag (v*) is pushed.
-# Requires an NPM_TOKEN repository secret with publish rights.
+# Uses npm trusted publishing. Configure the matching publisher in npm first.
+# See docs/RELEASING.md. No long-lived publish token is required.
 on:
   push:
     tags: ["v*"]
@@ -13,13 +14,16 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 20
+          node-version: 24
           registry-url: https://registry.npmjs.org
-          cache: npm
+          package-manager-cache: false
+      - name: install trusted-publishing-compatible npm
+        run: npm install --global npm@11.18.0
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
@@ -46,5 +50,3 @@ jobs:
             exit 1
           fi
       - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

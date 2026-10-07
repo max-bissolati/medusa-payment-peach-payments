@@ -2,10 +2,31 @@
 
 ## What's next
 
-**Maintain and announce.** v0.1.0 is live on npm (published 2026-07-07 via the release
-workflow with provenance) and the repo is public. Candidate next steps: submit the plugin
-to Medusa's integrations listing, announce in the Medusa Discord and community channels,
-and watch the issue tracker. The hardening list below is the code backlog.
+**Complete publishing setup and maintain.** npm already serves v0.1.5. The old GitHub Actions
+publish attempt failed because no `NPM_TOKEN` was configured. The replacement workflow uses npm
+trusted publishing; configure the owner-side trust entry described in `docs/RELEASING.md` before
+pushing the next version tag, then verify its first real publish. A green test run does not prove
+that npm trust is configured.
+
+Review the open Dependabot pull requests separately, especially major TypeScript, Jest and Medusa
+updates. Do not batch-merge them as repository housekeeping. Community announcements and a Medusa
+listing remain optional follow-ups requiring explicit authorization.
+
+## Dependency security review
+
+The 2026-10-07 `npm audit` of the current lockfile reports 175 affected package entries
+(46 moderate, 127 high, 2 critical). This repository installs Medusa as development dependencies
+and declares it as a peer dependency for consumers; audit counts alone do not prove runtime
+exposure in a consuming store. Review that store's actual lockfile separately.
+
+- Critical `@mikro-orm/core`: advisory GHSA-gwhv-j974-6fxm (SQL injection), with related
+  GHSA-qpfv-44f3-qqx6 (prototype pollution). npm proposes updating the Medusa development packages
+  to 2.21.2. Assess the existing Medusa dependency PR, compatible framework versions, and plugin
+  lifecycle tests before updating `package.json` and `package-lock.json`.
+- Critical `proxy-addr`: GHSA-jqcg-44mw-7w3h (IP spoofing); affected range >=1.1.0 <2.0.8.
+  Review the transitive update and trusted-proxy configuration where this is used.
+- Re-run the full audit after remediation. Do not apply `npm audit fix --force` blindly or treat
+  passing plugin unit tests as evidence that these dependency advisories are resolved.
 
 ## Hardening (LOW, non-blocking, from the verification loop)
 
